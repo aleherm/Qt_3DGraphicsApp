@@ -17,12 +17,26 @@ public:
     void AddPointToObject(Point3D p3D);
     void AddPolygonToObject(QVector<int> indices, int color);
     void FinishObject();
+    void ApplyTransformation(Transformation transf);
 
     void Translate(double dx, double dy, double dz);
+    void Scale(double sx, double sy, double sz);
     void RotateOz(double alfa);
+    void RotateOy(double beta);
+    void RotateOx(double gama);
     // scalari, simetrii, rotatii etc. scena
 
     void setWindowCoordinates(int width, int height);
+
+    QVector<Object3D> GetObjects3D()
+    {
+        return this->m_objects3D;
+    }
+
+    void SetObjects3D(QVector<Object3D> objects3D)
+    {
+        this->m_objects3D = objects3D;
+    }
 };
 
 #endif // SCENE3D_H

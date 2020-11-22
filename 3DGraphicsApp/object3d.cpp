@@ -1,4 +1,5 @@
 #include "object3d.h"
+#include <QDebug>
 
 Object3D::Object3D()
 {
@@ -52,10 +53,30 @@ void Object3D::Translate(double dx, double dy, double dz)
     this->ApplyTransformation();
 }
 
+void Object3D::Scale(double sx, double sy, double sz)
+{
+    transformation3D.Scale(sx, sy, sz);
+    this->ApplyTransformation();
+}
+
 void Object3D::RotateOz(double alfa) // Oz
 {
     Point3D gravityPoint = GetGravityCenterPoint();
     transformation3D.RotateOz(alfa, Point3D(gravityPoint.x, gravityPoint.y, 0));
+    this->ApplyTransformation();
+}
+
+void Object3D::RotateOy(double beta) // Oz
+{
+    Point3D gravityPoint = GetGravityCenterPoint();
+    transformation3D.RotateOy(beta, Point3D(gravityPoint.x, gravityPoint.y, 0));
+    this->ApplyTransformation();
+}
+
+void Object3D::RotateOx(double gama) // Oz
+{
+    Point3D gravityPoint = GetGravityCenterPoint();
+    transformation3D.RotateOx(gama, Point3D(gravityPoint.x, gravityPoint.y, 0));
     this->ApplyTransformation();
 }
 
@@ -68,10 +89,14 @@ void Object3D::Reset()
 
 void Object3D::ApplyTransformation()
 {
+    QDebug deb = qDebug();
     for (int i = 0; i < m_points3D.size(); i++)
     {
         double newX, newY, newZ;
         transformation3D.ApplyTransformation(m_points3D[i].x, m_points3D[i].y, m_points3D[i].z, newX, newY, newZ);
+        deb<<"Old: "<<m_points3D[i].x<< " " << m_points3D[i].y<< " "<< m_points3D[i].z;
+        deb<<"New: "<<newX<< " " << newY<< " "<< newZ;
+        deb<<endl;
         Point3D newPoint(newX, newY, newZ);
         m_points3D[i] = newPoint;
         m_points2D[i] = QPoint(PerspectiveProjection(newPoint));

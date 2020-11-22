@@ -29,8 +29,16 @@ public:
     void AddPoint3D(Point3D p3D);
     void AddPolygon(QVector<int> polygonIndices, int color);
     void Translate(double dx, double dy, double dz);
+    void Scale(double sx, double sy, double sz);
     void RotateOz(double alfa);
+    void RotateOy(double beta);
+    void RotateOx(double gama);
     // scalari, simetrii, rotatii etc.
+
+    void SetTransformation(Transformation transf)
+    {
+        this->transformation3D = transf;
+    }
 
     // basic
     void ApplyTransformation();

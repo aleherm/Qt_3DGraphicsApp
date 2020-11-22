@@ -37,13 +37,40 @@ void Scene3D::Translate(double dx, double dy, double dz)
         ob.Translate(dx, dy, dz);
 }
 
+void Scene3D::Scale(double sx, double sy, double sz)
+{
+    for (Object3D& ob : m_objects3D)
+        ob.Scale(sx, sy, sz);
+}
+
 void Scene3D::RotateOz(double alfa)
 {
     for (Object3D& ob : m_objects3D)
         ob.RotateOz(alfa);
 }
 
+void Scene3D::RotateOx(double gama)
+{
+    for (Object3D& ob : m_objects3D)
+        ob.RotateOx(gama);
+}
+
+void Scene3D::RotateOy(double beta)
+{
+    for (Object3D& ob : m_objects3D)
+        ob.RotateOy(beta);
+}
+
 void Scene3D::setWindowCoordinates(int width, int height)
 {
     m_currentObject.setWindowCoordinates(width, height);
+}
+
+void Scene3D::ApplyTransformation(Transformation transf)
+{
+    for (Object3D& ob : m_objects3D)
+    {
+        ob.SetTransformation(transf);
+        ob.ApplyTransformation();
+    }
 }

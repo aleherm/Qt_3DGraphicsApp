@@ -10,6 +10,7 @@ class Transformation
 public:
     Transformation();
     void Translate(double dx, double dy, double dz);
+    void Scale(double sx, double sy, double sz);
 
     void RotateOz(double alfa, Point3D axis);
     void RotateOy(double beta, Point3D axis);
@@ -17,6 +18,7 @@ public:
 
     void ApplyTransformation(double x, double y, double z, double& xp, double& yp, double& zp);
     void Reset(double m[4][4]);
+    void PrintMatrix(double m[4][4]);
 };
 
 #endif // TRANSFORMATION_H

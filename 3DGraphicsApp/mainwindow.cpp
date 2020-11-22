@@ -28,10 +28,10 @@ void MainWindow::addCoordinates()
     scene3D.AddPointToObject(Point3D(-50, 170, 0)); // 3
 
     // puncte fata
-    scene3D.AddPointToObject(Point3D(-50, 30, 300)); // 4
-    scene3D.AddPointToObject(Point3D(-200, 30, 300)); // 5
-    scene3D.AddPointToObject(Point3D(-200, 170, 300)); // 6
-    scene3D.AddPointToObject(Point3D(-50, 170, 300)); // 7
+    scene3D.AddPointToObject(Point3D(-50, 30, 140)); // 4
+    scene3D.AddPointToObject(Point3D(-200, 30, 140)); // 5
+    scene3D.AddPointToObject(Point3D(-200, 170, 140)); // 6
+    scene3D.AddPointToObject(Point3D(-50, 170, 140)); // 7
 
     // perete spate
     scene3D.AddPolygonToObject({ 0, 1, 2, 3 }, 255);
@@ -52,12 +52,11 @@ void MainWindow::paintEvent(QPaintEvent *e)
     {
         scene3D.Display(painter);
         this->start=false;
-        qDebug()<<start;
     }
     else
     {
-
-
+        scene3D.ApplyTransformation(transf);
+        scene3D.Display(painter);
     }
 }
 
@@ -65,19 +64,53 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_W)
     {
-        this->transf.Translate(0, -10, 0);
+        scene3D.Translate(0, -10, 0);
     }
     if(event->key() == Qt::Key_S)
     {
-        this->transf.Translate(0, 10, 0);
+        scene3D.Translate(0, 10, 0);
     }
     if(event->key() == Qt::Key_D)
     {
-        this->transf.Translate(-10, 0, 0);
+        scene3D.Translate(10, 0, 0);
     }
     if(event->key() == Qt::Key_A)
     {
-        this->transf.Translate(10, 0, 0);
+        scene3D.Translate(-10, 0, 0);
     }
+    if(event->key() == Qt::Key_Plus)
+    {
+        scene3D.Scale(1.1, 1.1, 1.1);
+    }
+    if(event->key() == Qt::Key_Minus)
+    {
+        scene3D.Scale(0.9, 0.9, 0.9);
+    }
+
+    if(event->key() == Qt::Key_Right)
+    {
+        scene3D.RotateOz(0.1);
+    }
+    if(event->key() == Qt::Key_Left)
+    {
+        scene3D.RotateOz(-0.1);
+    }
+    if(event->key() == Qt::Key_Up)
+    {
+        scene3D.RotateOx(0.1);
+    }
+    if(event->key() == Qt::Key_Down)
+    {
+        scene3D.RotateOx(-0.1);
+    }
+    if(event->key() == Qt::Key_Comma)
+    {
+        scene3D.RotateOy(0.1);
+    }
+    if(event->key() == Qt::Key_Period)
+    {
+        scene3D.RotateOy(-0.1);
+    }
+
     repaint();
 }
