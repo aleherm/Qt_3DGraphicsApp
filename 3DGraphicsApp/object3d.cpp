@@ -13,24 +13,45 @@ QPoint Object3D::PerspectiveProjection(Point3D p3D)
     return QPoint(x, y);
 }
 
+// true -> afiseaza, false -> nu afiseaza
+bool Object3D::IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2)
+{
+    Point3D PA0(A0.x, A0.y, A0.z - zp);
+    Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
+    Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
+    Point3D N = VectorMutiplication(A0A2, A0A1);
+    double result = ScalarMultiplication(PA0, N);
+    if(result < 0)
+        return true; // se afiseaza
+    return false;
+}
+
 void Object3D::Display(QPainter &painter)
 {
     int index1, index2;
     for (int i = 0; i < m_polygonIndices.size(); i++)
     {
-        int  j;
-        for (j = 0; j < m_polygonIndices[i].size() - 1; j++)
+        Point3D A0(m_points3D[m_polygonIndices[i][0]]);
+        Point3D A1(m_points3D[m_polygonIndices[i][1]]);
+        Point3D A2(m_points3D[m_polygonIndices[i][2]]);
+        bool isOk = this->IsVisiblePolygon(A0, A1, A2);
+
+        if(isOk)
         {
-            index1 = m_polygonIndices[i][j];
-            index2 = m_polygonIndices[i][j+1];
-            if (index1 < m_points2D.size() && index2 < m_points2D.size())
+            int  j;
+            for (j = 0; j < m_polygonIndices[i].size() - 1; j++)
             {
-                painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
+                index1 = m_polygonIndices[i][j];
+                index2 = m_polygonIndices[i][j+1];
+                if (index1 < m_points2D.size() && index2 < m_points2D.size())
+                {
+                    painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
+                }
             }
+            index1 = m_polygonIndices[i][j];
+            index2 = m_polygonIndices[i][0];
+            painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
         }
-        index1 = m_polygonIndices[i][j];
-        index2 = m_polygonIndices[i][0];
-        painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
     }
 }
 
@@ -120,6 +141,25 @@ void Object3D::ApplyTransformation()
         m_points3D[i] = newPoint;
         m_points2D[i] = QPoint(PerspectiveProjection(newPoint));
     }
+}
+
+Point3D Object3D::VectorMutiplication(Point3D v1, Point3D v2)
+{
+    double x, y, z;
+    x = v1.y * v2.z - v2.y * v1.z;
+    y = v1.x * v2.z - v2.x * v1.z;
+    z = v1.x * v2.y - v2.x * v1.y;
+    return Point3D(x, -y, z);
+}
+
+double Object3D::ScalarMultiplication(Point3D v1, Point3D v2)
+{
+    return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+}
+
+double Object3D::VectorNorm(Point3D v)
+{
+    return sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
 }
 
 Point3D Object3D::GetGravityCenterPoint()

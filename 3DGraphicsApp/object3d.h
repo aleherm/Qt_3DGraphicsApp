@@ -5,6 +5,7 @@
 #include <QPainter>
 #include "point3d.h"
 #include "transformation.h"
+#include "math.h"
 
 
 class Object3D
@@ -21,6 +22,10 @@ class Object3D
     Transformation transformation3D;
 
     QPoint PerspectiveProjection(Point3D p3D);
+    bool IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2);
+    Point3D VectorMutiplication(Point3D v1, Point3D v2);
+    double VectorNorm(Point3D v);
+    double ScalarMultiplication(Point3D v1, Point3D v2);
 public:
     Object3D();
     void setWindowCoordinates(int width, int height);
