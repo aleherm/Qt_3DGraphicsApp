@@ -28,12 +28,18 @@ public:
     // specific
     void AddPoint3D(Point3D p3D);
     void AddPolygon(QVector<int> polygonIndices, int color);
+
     void Translate(double dx, double dy, double dz);
-    void Scale(double sx, double sy, double sz);
+
+    void ScaleOrigin(double sx, double sy, double sz);
+    void ScalePoint(double sx, double sy, double sz, Point3D point);
+
     void RotateOz(double alfa);
     void RotateOy(double beta);
     void RotateOx(double gama);
-    // scalari, simetrii, rotatii etc.
+
+    void SymmetryOrigin();
+    void SymmetryPlane();
 
     void SetTransformation(Transformation transf)
     {

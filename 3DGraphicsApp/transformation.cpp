@@ -33,16 +33,33 @@ void Transformation::matrixMultiplication(double m[4][4])
     PrintMatrix(t);
 }
 
-void Transformation::Scale(double sx, double sy, double sz)
+void Transformation::ScaleOrigin(double sx, double sy, double sz)
 {
     double m[4][4];
-    this->Reset(m);
+    Reset(m);
 
-    m[0][0] = sx;
-    m[1][1] = sy;
-    m[2][2] = sz;
+    m[0][0]=sx;
+    m[1][1]=sy;
+    m[2][2]=sz;
 
     matrixMultiplication(m);
+}
+
+void Transformation::ScalePoint(double sx, double sy, double sz, Point3D point)
+{
+    Translate(point.x, point.y, point.z);
+    ScaleOrigin(sx, sy, sz);
+    Translate(-point.x, -point.y, -point.z);
+}
+
+void Transformation::SymmetryOrigin()
+{
+    this->ScaleOrigin(-1, -1, -1);
+}
+
+void Transformation::SymmetryPlane()
+{
+    this->ScaleOrigin(1, -1, -1);
 }
 
 void Transformation::Translate(double dx, double dy, double dz)

@@ -62,6 +62,7 @@ void MainWindow::paintEvent(QPaintEvent *e)
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+    // translatii
     if(event->key() == Qt::Key_W)
     {
         scene3D.Translate(0, -10, 0);
@@ -78,15 +79,28 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
         scene3D.Translate(-10, 0, 0);
     }
+
+    // scalari
     if(event->key() == Qt::Key_Plus)
     {
-        scene3D.Scale(1.1, 1.1, 1.1);
+        scene3D.ScaleOrigin(1.1, 1.1, 1.1);
     }
     if(event->key() == Qt::Key_Minus)
     {
-        scene3D.Scale(0.9, 0.9, 0.9);
+        scene3D.ScaleOrigin(0.9, 0.9, 0.9);
     }
 
+    if(event->key() == Qt::Key_O)
+    {
+        scene3D.ScalePoint(0.9, 0.9, 0.9, Point3D(100, 100, 100));
+    }
+
+    if(event->key() == Qt::Key_P)
+    {
+        scene3D.ScalePoint(1.1, 1.1, 1.1, Point3D(100, 100, 100));
+    }
+
+    // rotatii
     if(event->key() == Qt::Key_Right)
     {
         scene3D.RotateOz(0.1);
@@ -110,6 +124,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Period)
     {
         scene3D.RotateOy(-0.1);
+    }
+
+    // simetrii
+    if(event->key() == Qt::Key_X)
+    {
+        scene3D.SymmetryOrigin();
+    }
+
+    if(event->key() == Qt::Key_Z)
+    {
+        scene3D.SymmetryPlane();
     }
 
     repaint();

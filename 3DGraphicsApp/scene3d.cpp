@@ -7,7 +7,7 @@ Scene3D::Scene3D()
 
 void Scene3D::Display(QPainter& painter)
 {
-    for (Object3D& ob : m_objects3D)
+    for (Object3D ob : m_objects3D)
         ob.Display(painter);
 }
 
@@ -37,12 +37,6 @@ void Scene3D::Translate(double dx, double dy, double dz)
         ob.Translate(dx, dy, dz);
 }
 
-void Scene3D::Scale(double sx, double sy, double sz)
-{
-    for (Object3D& ob : m_objects3D)
-        ob.Scale(sx, sy, sz);
-}
-
 void Scene3D::RotateOz(double alfa)
 {
     for (Object3D& ob : m_objects3D)
@@ -55,10 +49,34 @@ void Scene3D::RotateOx(double gama)
         ob.RotateOx(gama);
 }
 
+void Scene3D::ScaleOrigin(double sx, double sy, double sz)
+{
+    for (Object3D& ob : m_objects3D)
+        ob.ScaleOrigin(sx, sy, sz);
+}
+
+void Scene3D::ScalePoint(double sx, double sy, double sz, Point3D point)
+{
+    for (Object3D& ob : m_objects3D)
+        ob.ScalePoint(sx, sy, sz, point);
+}
+
 void Scene3D::RotateOy(double beta)
 {
     for (Object3D& ob : m_objects3D)
         ob.RotateOy(beta);
+}
+
+void Scene3D::SymmetryOrigin()
+{
+    for (Object3D& ob : m_objects3D)
+        ob.SymmetryOrigin();
+}
+
+void Scene3D::SymmetryPlane()
+{
+    for (Object3D& ob : m_objects3D)
+        ob.SymmetryPlane();
 }
 
 void Scene3D::setWindowCoordinates(int width, int height)

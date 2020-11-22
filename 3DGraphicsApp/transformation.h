@@ -10,11 +10,17 @@ class Transformation
 public:
     Transformation();
     void Translate(double dx, double dy, double dz);
+
     void Scale(double sx, double sy, double sz);
+    void ScaleOrigin(double sx, double sy, double sz);
+    void ScalePoint(double sx, double sy, double sz, Point3D point);
 
     void RotateOz(double alfa, Point3D axis);
     void RotateOy(double beta, Point3D axis);
     void RotateOx(double gama, Point3D axis);
+
+    void SymmetryOrigin();
+    void SymmetryPlane();
 
     void ApplyTransformation(double x, double y, double z, double& xp, double& yp, double& zp);
     void Reset(double m[4][4]);

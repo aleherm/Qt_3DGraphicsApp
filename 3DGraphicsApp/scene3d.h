@@ -20,11 +20,16 @@ public:
     void ApplyTransformation(Transformation transf);
 
     void Translate(double dx, double dy, double dz);
-    void Scale(double sx, double sy, double sz);
+
+    void ScaleOrigin(double sx, double sy, double sz);
+    void ScalePoint(double sx, double sy, double sz, Point3D point);
+
     void RotateOz(double alfa);
     void RotateOy(double beta);
     void RotateOx(double gama);
-    // scalari, simetrii, rotatii etc. scena
+
+    void SymmetryOrigin();
+    void SymmetryPlane();
 
     void setWindowCoordinates(int width, int height);
 

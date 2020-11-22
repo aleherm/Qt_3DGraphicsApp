@@ -53,9 +53,15 @@ void Object3D::Translate(double dx, double dy, double dz)
     this->ApplyTransformation();
 }
 
-void Object3D::Scale(double sx, double sy, double sz)
+void Object3D::ScaleOrigin(double sx, double sy, double sz)
 {
-    transformation3D.Scale(sx, sy, sz);
+    transformation3D.ScaleOrigin(sx, sy, sz);
+    this->ApplyTransformation();
+}
+
+void Object3D::ScalePoint(double sx, double sy, double sz, Point3D point)
+{
+    transformation3D.ScalePoint(sx, sy, sz, point);
     this->ApplyTransformation();
 }
 
@@ -80,6 +86,18 @@ void Object3D::RotateOx(double gama) // Oz
     this->ApplyTransformation();
 }
 
+void Object3D::SymmetryOrigin()
+{
+    transformation3D.SymmetryOrigin();
+    this->ApplyTransformation();
+}
+
+void Object3D::SymmetryPlane()
+{
+    transformation3D.SymmetryPlane();
+    this->ApplyTransformation();
+}
+
 void Object3D::Reset()
 {
     m_polygonIndices.resize(0);
@@ -94,7 +112,7 @@ void Object3D::ApplyTransformation()
     {
         double newX, newY, newZ;
         transformation3D.ApplyTransformation(m_points3D[i].x, m_points3D[i].y, m_points3D[i].z, newX, newY, newZ);
-        deb<<"Old: "<<m_points3D[i].x<< " " << m_points3D[i].y<< " "<< m_points3D[i].z;
+        deb<<"Old: "<<m_points3D[i].x<< " " << m_points3D[i].y<< " "<< m_points3D[i].z << "|";
         deb<<"New: "<<newX<< " " << newY<< " "<< newZ;
         deb<<endl;
         Point3D newPoint(newX, newY, newZ);
