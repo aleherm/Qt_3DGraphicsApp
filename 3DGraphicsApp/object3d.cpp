@@ -26,6 +26,36 @@ bool Object3D::IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2)
     return false;
 }
 
+bool Object3D::IsIlluminated(Point3D A0, Point3D A1, Point3D A2)
+{
+    Point3D PA0(A0.x, A0.y, A0.z - zp);
+    Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
+    Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
+
+    Point3D N = VectorMutiplication(A0A2, A0A1);
+    Point3D lightVector(0, 0, zp);
+
+    double pointSource = lightVector.x * N.x + lightVector.y * N.y + lightVector.z * N.z;
+
+    if(pointSource < 0 )
+        return true; // culoare de iluminare generata
+    return false; // se coloreaza negru
+}
+
+int Object3D::GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2)
+{
+    Point3D PA0(A0.x, A0.y, A0.z - zp);
+    Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
+    Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
+
+    Point3D N = VectorMutiplication(A0A2, A0A1);
+
+    Point3D lightVector(0, 0, zp);
+
+    double result = (1.0 - ambientLight) * ScalarMultiplication(lightVector, N) / (VectorNorm(lightVector) * VectorNorm(N));
+    return (int)result;
+}
+
 void Object3D::Display(QPainter &painter)
 {
     int index1, index2;
@@ -36,22 +66,22 @@ void Object3D::Display(QPainter &painter)
         Point3D A2(m_points3D[m_polygonIndices[i][2]]);
         bool isOk = this->IsVisiblePolygon(A0, A1, A2);
 
-        if(isOk)
+        if(!isOk)
+            continue;
+
+        int  j;
+        for (j = 0; j < m_polygonIndices[i].size() - 1; j++)
         {
-            int  j;
-            for (j = 0; j < m_polygonIndices[i].size() - 1; j++)
-            {
-                index1 = m_polygonIndices[i][j];
-                index2 = m_polygonIndices[i][j+1];
-                if (index1 < m_points2D.size() && index2 < m_points2D.size())
-                {
-                    painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
-                }
-            }
             index1 = m_polygonIndices[i][j];
-            index2 = m_polygonIndices[i][0];
-            painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
+            index2 = m_polygonIndices[i][j+1];
+            if (index1 < m_points2D.size() && index2 < m_points2D.size())
+            {
+                painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
+            }
         }
+        index1 = m_polygonIndices[i][j];
+        index2 = m_polygonIndices[i][0];
+        painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
     }
 }
 

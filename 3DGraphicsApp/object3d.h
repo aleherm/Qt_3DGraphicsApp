@@ -11,6 +11,7 @@
 class Object3D
 {
     double zp = 1000;
+    double ambientLight = 0.2f;
     int wWidth, wHeight;
 
     QVector<Point3D> m_points3D;
@@ -23,7 +24,9 @@ class Object3D
 
     QPoint PerspectiveProjection(Point3D p3D);
     bool IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2);
+    bool IsIlluminated(Point3D A0, Point3D A1, Point3D A2);
     Point3D VectorMutiplication(Point3D v1, Point3D v2);
+    int GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2);
     double VectorNorm(Point3D v);
     double ScalarMultiplication(Point3D v1, Point3D v2);
 public:
