@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QString>
 #include <QMainWindow>
 #include <QMainWindow>
 #include <QVector3D>
@@ -26,6 +27,7 @@ public:
     Transformation transf;
     Scene3D scene3D;
     bool start;
+    QString message;
 
     void paintEvent(QPaintEvent *e);
     void keyPressEvent(QKeyEvent *event);

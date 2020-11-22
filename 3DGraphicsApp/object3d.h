@@ -35,11 +35,11 @@ public:
     void ScalePoint(double sx, double sy, double sz, Point3D point);
 
     void RotateOz(double alfa);
-    void RotateOy(double beta);
-    void RotateOx(double gama);
+    void RotateOx(double beta);
+    void RotateOy(double gama);
 
-    void SymmetryOrigin();
-    void SymmetryPlane();
+    void Symmetry(double sx, double sy, double sz);
+    void SymmetryPlane(double sx, double sy, double sz, double alfa, double beta);
 
     void SetTransformation(Transformation transf)
     {

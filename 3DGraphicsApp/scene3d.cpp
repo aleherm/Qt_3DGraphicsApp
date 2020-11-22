@@ -43,10 +43,16 @@ void Scene3D::RotateOz(double alfa)
         ob.RotateOz(alfa);
 }
 
-void Scene3D::RotateOx(double gama)
+void Scene3D::RotateOx(double beta)
 {
     for (Object3D& ob : m_objects3D)
-        ob.RotateOx(gama);
+        ob.RotateOx(beta);
+}
+
+void Scene3D::RotateOy(double gama)
+{
+    for (Object3D& ob : m_objects3D)
+        ob.RotateOy(gama);
 }
 
 void Scene3D::ScaleOrigin(double sx, double sy, double sz)
@@ -61,22 +67,16 @@ void Scene3D::ScalePoint(double sx, double sy, double sz, Point3D point)
         ob.ScalePoint(sx, sy, sz, point);
 }
 
-void Scene3D::RotateOy(double beta)
+void Scene3D::Symmetry(double sx, double sy, double sz)
 {
     for (Object3D& ob : m_objects3D)
-        ob.RotateOy(beta);
+        ob.Symmetry(sx, sy, sz);
 }
 
-void Scene3D::SymmetryOrigin()
+void Scene3D::SymmetryPlane(double sx, double sy, double sz, double alfa, double beta)
 {
     for (Object3D& ob : m_objects3D)
-        ob.SymmetryOrigin();
-}
-
-void Scene3D::SymmetryPlane()
-{
-    for (Object3D& ob : m_objects3D)
-        ob.SymmetryPlane();
+        ob.SymmetryPlane(sx, sy, sz, alfa, beta);
 }
 
 void Scene3D::setWindowCoordinates(int width, int height)

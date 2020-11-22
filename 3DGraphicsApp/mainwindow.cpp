@@ -57,6 +57,7 @@ void MainWindow::paintEvent(QPaintEvent *e)
     {
         scene3D.ApplyTransformation(transf);
         scene3D.Display(painter);
+        painter.drawText(rect(), Qt::AlignCenter, message);
     }
 }
 
@@ -127,14 +128,47 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 
     // simetrii
-    if(event->key() == Qt::Key_X)
+    if(event->key() == Qt::Key_1)
     {
-        scene3D.SymmetryOrigin();
+        this->message = "xOy symmetry";
+        scene3D.Symmetry(1, 1, -1);
+    }
+    if(event->key() == Qt::Key_2)
+    {
+        this->message = "yOz symmetry";
+        scene3D.Symmetry(-1, 1, 1);
+    }
+    if(event->key() == Qt::Key_3)
+    {
+        this->message = "zOx symmetry";
+        scene3D.Symmetry(1, -1, 1);
+    }
+
+    if(event->key() == Qt::Key_4)
+    {
+        this->message = "Ox symmetry";
+        scene3D.Symmetry(1, -1, -1);
+    }
+    if(event->key() == Qt::Key_5)
+    {
+        this->message = "Oy symmetry";
+        scene3D.Symmetry(-1, 1, -1);
+    }
+    if(event->key() == Qt::Key_6)
+    {
+        this->message = "Oz symmetry";
+        scene3D.Symmetry(-1, -1, 1);
+    }
+    if(event->key() == Qt::Key_7)
+    {
+        this->message = "O symmetry";
+        scene3D.Symmetry(-1, -1, -1);
     }
 
     if(event->key() == Qt::Key_Z)
     {
-        scene3D.SymmetryPlane();
+        this->message = "plane symmetry";
+        scene3D.SymmetryPlane(10, 10, 0, 0.1, 0.1);
     }
 
     repaint();

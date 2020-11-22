@@ -52,14 +52,31 @@ void Transformation::ScalePoint(double sx, double sy, double sz, Point3D point)
     Translate(-point.x, -point.y, -point.z);
 }
 
-void Transformation::SymmetryOrigin()
+void Transformation::Symmetry(double sx, double sy, double sz)
 {
-    this->ScaleOrigin(-1, -1, -1);
+    this->ScaleOrigin(sx, sy, sz);
 }
 
-void Transformation::SymmetryPlane()
+void Transformation::SymmetryPlane(double sx, double sy, double sz, double alfa, double beta, Point3D gravityPoint)
 {
-    this->ScaleOrigin(1, -1, -1);
+    this->Translate(sx, sy, sz);
+    this->RotateOy(-alfa, Point3D(gravityPoint.x, 0, gravityPoint.z));
+    this->RotateOz(beta, Point3D(gravityPoint.x, gravityPoint.y, 0));
+    this->ScaleOrigin(0, 1.1, 1.1); // ?????
+    this->RotateOz(-beta, Point3D(gravityPoint.x, gravityPoint.y, 0));
+    this->RotateOy(alfa, Point3D(gravityPoint.x, 0, gravityPoint.z));
+    this->Translate(-sx, -sy, -sz);
+}
+
+void Transformation::RotationAroundLine(double sx, double sy, double sz, double alfa, double beta, double gama, Point3D gravityPoint)
+{
+    this->Translate(sx, sy, sz);
+    this->RotateOy(-gama, Point3D(gravityPoint.x, 0, gravityPoint.z));
+    this->RotateOz(alfa, Point3D(gravityPoint.x, gravityPoint.y, 0));
+    this->RotateOx(beta, Point3D(0, gravityPoint.y, gravityPoint.z));
+    this->RotateOz(-alfa, Point3D(gravityPoint.x, gravityPoint.y, 0));
+    this->RotateOy(gama, Point3D(gravityPoint.x, 0, gravityPoint.z));
+    this->Translate(-sx, -sy, -sz);
 }
 
 void Transformation::Translate(double dx, double dy, double dz)
@@ -90,29 +107,31 @@ void Transformation::RotateOz(double alfa, Point3D axis)
 
     this->Translate(axis.x, axis.y, axis.z);
 }
-//zOx
-void Transformation::RotateOy(double beta, Point3D axis)
+
+//yOz
+void Transformation::RotateOx(double beta, Point3D axis)
 {
     this->Translate(-axis.x, -axis.y, -axis.z);
     double m[4][4];
     Reset(m);
-    m[0][0] = cos(beta);
-    m[0][2] = -sin(beta);
-    m[2][0] = sin(beta);
+    m[1][1] = cos(beta);
+    m[1][2] = -sin(beta);
+    m[2][1] = sin(beta);
     m[2][2] = cos(beta);
     matrixMultiplication(m);
 
     this->Translate(axis.x, axis.y, axis.z);
 }
-//yOz
-void Transformation::RotateOx(double gama, Point3D axis)
+
+//zOx
+void Transformation::RotateOy(double gama, Point3D axis)
 {
     this->Translate(-axis.x, -axis.y, -axis.z);
     double m[4][4];
     Reset(m);
-    m[1][1] = cos(gama);
-    m[1][2] = -sin(gama);
-    m[2][1] = sin(gama);
+    m[0][0] = cos(gama);
+    m[0][2] = -sin(gama);
+    m[2][0] = sin(gama);
     m[2][2] = cos(gama);
     matrixMultiplication(m);
 

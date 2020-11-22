@@ -72,29 +72,30 @@ void Object3D::RotateOz(double alfa) // Oz
     this->ApplyTransformation();
 }
 
-void Object3D::RotateOy(double beta) // Oz
+void Object3D::RotateOx(double beta) // Ox
 {
     Point3D gravityPoint = GetGravityCenterPoint();
-    transformation3D.RotateOy(beta, Point3D(gravityPoint.x, gravityPoint.y, 0));
+    transformation3D.RotateOx(beta, Point3D(0, gravityPoint.y, gravityPoint.z));
     this->ApplyTransformation();
 }
 
-void Object3D::RotateOx(double gama) // Oz
+void Object3D::RotateOy(double gama) // Oy
 {
     Point3D gravityPoint = GetGravityCenterPoint();
-    transformation3D.RotateOx(gama, Point3D(gravityPoint.x, gravityPoint.y, 0));
+    transformation3D.RotateOy(gama, Point3D(gravityPoint.x, 0, gravityPoint.z));
     this->ApplyTransformation();
 }
 
-void Object3D::SymmetryOrigin()
+void Object3D::Symmetry(double sx, double sy, double sz)
 {
-    transformation3D.SymmetryOrigin();
+    transformation3D.Symmetry(sx, sy, sz);
     this->ApplyTransformation();
 }
 
-void Object3D::SymmetryPlane()
+void Object3D::SymmetryPlane(double sx, double sy, double sz, double alfa, double beta)
 {
-    transformation3D.SymmetryPlane();
+    Point3D gravityPoint = GetGravityCenterPoint();
+    transformation3D.SymmetryPlane(sx, sy, sz, alfa, beta, gravityPoint);
     this->ApplyTransformation();
 }
 
