@@ -58,30 +58,35 @@ int Object3D::GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2)
 
 void Object3D::Display(QPainter &painter)
 {
-    int index1, index2;
+    int index;
     for (int i = 0; i < m_polygonIndices.size(); i++)
     {
-        Point3D A0(m_points3D[m_polygonIndices[i][0]]);
-        Point3D A1(m_points3D[m_polygonIndices[i][1]]);
-        Point3D A2(m_points3D[m_polygonIndices[i][2]]);
-        bool isOk = this->IsVisiblePolygon(A0, A1, A2);
+        Point3D P0(m_points3D[m_polygonIndices[i][0]]);
+        Point3D P1(m_points3D[m_polygonIndices[i][1]]);
+        Point3D P2(m_points3D[m_polygonIndices[i][2]]);
+        bool isVisible = this->IsVisiblePolygon(P0, P1, P2);
+        bool isIlluminated = this->IsIlluminated(P0, P1, P2);
+        double colorFactor = GetIlluminatingColor(P0, P1, P2);
 
-        if(!isOk)
-            continue;
+//        if(!isVisible)
+//            continue;
 
+        QPoint points[4];
         int  j;
-        for (j = 0; j < m_polygonIndices[i].size() - 1; j++)
+        for (j = 0; j < m_polygonIndices[i].size(); j++)
         {
-            index1 = m_polygonIndices[i][j];
-            index2 = m_polygonIndices[i][j+1];
-            if (index1 < m_points2D.size() && index2 < m_points2D.size())
-            {
-                painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
-            }
+            index = m_polygonIndices[i][j];
+            points[j] = m_points2D[index];
         }
-        index1 = m_polygonIndices[i][j];
-        index2 = m_polygonIndices[i][0];
-        painter.drawLine(m_points2D[index1].x(), m_points2D[index1].y(), m_points2D[index2].x(), m_points2D[index2].y());
+
+        int color = this->m_colors[i];
+
+//        if (isIlluminated)
+//            color *= colorFactor;
+
+//        painter.setPen(Qt::darkGreen);
+//        painter.setBrush(QBrush(QColor(color, color, color)));
+        painter.drawPolygon(points, m_polygonIndices[i].size());
     }
 }
 
