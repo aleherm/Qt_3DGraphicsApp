@@ -217,6 +217,56 @@ Point3D Object3D::GetGravityCenterPoint()
     return gravityPoint;
 }
 
+void Object3D::ZBufferingDisplay(QPainter& painter)
+{
+    int zBuffs[m_polygonIndices.size()];
+    for (int i = 0; i < m_polygonIndices.size(); i++)
+    {
+        double gravityZ = 0;
+        for (int j = 0; j < m_polygonIndices[i].size(); j++)
+        {
+            int index = m_polygonIndices[i][j];
+            gravityZ += m_points3D[index].z;
+        }
+        zBuffs[i] = gravityZ / m_polygonIndices[i].size();
+    }
+
+    QVector<QVector<int>> newPolygonIndices = m_polygonIndices;
+
+    //sort
+    QVector<int> temp;
+    for(int i = 0; i < newPolygonIndices.size(); i++)
+    {
+        for(int j = 0; j < newPolygonIndices.size()-i-1; j++)
+        {
+            if(zBuffs[j] > zBuffs[j+1])
+            {
+                // swap the elements
+                temp = newPolygonIndices[j];
+                newPolygonIndices[j] = newPolygonIndices[j+1];
+                newPolygonIndices[j+1] = temp;
+            }
+        }
+    }
+
+    int index;
+    for (int i = 0; i < newPolygonIndices.size(); i++)
+    {
+        QPoint points[4];
+        int  j;
+        for (j = 0; j < newPolygonIndices[i].size(); j++)
+        {
+            index = newPolygonIndices[i][j];
+            points[j] = m_points2D[index];
+        }
+
+        int color = this->m_colors[i];
+        painter.setPen(Qt::darkGreen);
+        painter.setBrush(QBrush(QColor(color, color, color)));
+        painter.drawPolygon(points, newPolygonIndices[i].size());
+    }
+}
+
 void Object3D::setWindowCoordinates(int width, int height)
 {
     this->wWidth = width;

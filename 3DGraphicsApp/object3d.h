@@ -60,6 +60,7 @@ public:
     void Reset();
 
     Point3D GetGravityCenterPoint();
+    void ZBufferingDisplay(QPainter& painter);
 };
 
 #endif // OBJECT3D_H

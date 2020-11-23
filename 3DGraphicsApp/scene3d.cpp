@@ -84,6 +84,12 @@ void Scene3D::setWindowCoordinates(int width, int height)
     m_currentObject.setWindowCoordinates(width, height);
 }
 
+void Scene3D::ZBufferingDisplay(QPainter& painter)
+{
+    for (Object3D& ob : m_objects3D)
+        ob.ZBufferingDisplay(painter);
+}
+
 void Scene3D::ApplyTransformation(Transformation transf)
 {
     for (Object3D& ob : m_objects3D)

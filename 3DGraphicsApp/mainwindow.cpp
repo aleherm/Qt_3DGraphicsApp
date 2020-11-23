@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     this->start=true;
+    this->isZBuffering = false;
     this->addCoordinates();
     ui->setupUi(this);
 }
@@ -55,9 +56,14 @@ void MainWindow::paintEvent(QPaintEvent *e)
     }
     else
     {
+        painter.drawText(rect(), Qt::AlignCenter, message);
+        if(isZBuffering)
+        {
+            scene3D.ZBufferingDisplay(painter);
+            return;
+        }
         scene3D.ApplyTransformation(transf);
         scene3D.Display(painter);
-        painter.drawText(rect(), Qt::AlignCenter, message);
     }
 }
 
@@ -165,10 +171,19 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         scene3D.Symmetry(-1, -1, -1);
     }
 
-    if(event->key() == Qt::Key_Z)
+    if(event->key() == Qt::Key_Q)
     {
         this->message = "plane symmetry";
         scene3D.SymmetryPlane(10, 10, 0, 0.1, 0.1);
+    }
+
+    if(event->key() == Qt::Key_Z)
+    {
+        this->message = "Z-Buffering";
+        if(this->isZBuffering == true)
+            this->isZBuffering = false;
+        else
+            this->isZBuffering = true;
     }
 
     repaint();

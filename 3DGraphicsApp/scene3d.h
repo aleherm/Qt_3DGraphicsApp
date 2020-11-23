@@ -42,6 +42,8 @@ public:
     {
         this->m_objects3D = objects3D;
     }
+
+    void ZBufferingDisplay(QPainter& painter);
 };
 
 #endif // SCENE3D_H

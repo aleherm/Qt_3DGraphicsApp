@@ -26,7 +26,7 @@ public:
 
     Transformation transf;
     Scene3D scene3D;
-    bool start;
+    bool start, isZBuffering;
     QString message;
 
     void paintEvent(QPaintEvent *e);
