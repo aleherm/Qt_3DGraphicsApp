@@ -21,7 +21,7 @@ bool Object3D::IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2)
     Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
     Point3D N = VectorMutiplication(A0A2, A0A1);
     double result = ScalarMultiplication(PA0, N);
-    if(result < 0)
+    if(result > 0)
         return true; // se afiseaza
     return false;
 }
@@ -52,7 +52,10 @@ int Object3D::GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2)
 
     Point3D lightVector(0, 0, zp);
 
-    double result = (1.0 - ambientLight) * ScalarMultiplication(lightVector, N) / (VectorNorm(lightVector) * VectorNorm(N));
+    double normCross = VectorNorm(lightVector) * VectorNorm(N);
+    double cosVector = ScalarMultiplication(lightVector, N) / normCross;
+
+    double result = (1.0 - ambientLight) * cosVector + ambientLight;
     return (int)result;
 }
 
@@ -65,11 +68,11 @@ void Object3D::Display(QPainter &painter)
         Point3D P1(m_points3D[m_polygonIndices[i][1]]);
         Point3D P2(m_points3D[m_polygonIndices[i][2]]);
         bool isVisible = this->IsVisiblePolygon(P0, P1, P2);
-        bool isIlluminated = this->IsIlluminated(P0, P1, P2);
-        double colorFactor = GetIlluminatingColor(P0, P1, P2);
+        //bool isIlluminated = this->IsIlluminated(P0, P1, P2);
+        //double colorFactor = GetIlluminatingColor(P0, P1, P2);
 
-//        if(!isVisible)
-//            continue;
+        if(!isVisible)
+            continue;
 
         QPoint points[4];
         int  j;
@@ -82,9 +85,11 @@ void Object3D::Display(QPainter &painter)
         int color = this->m_colors[i];
 
 //        if (isIlluminated)
-//            color *= colorFactor;
+//            color *= ambientLight;
+//        else
+//            color = color * colorFactor;
 
-//        painter.setPen(Qt::darkGreen);
+//        painter.setPen(Qt::black);
 //        painter.setBrush(QBrush(QColor(color, color, color)));
         painter.drawPolygon(points, m_polygonIndices[i].size());
     }
@@ -184,6 +189,7 @@ Point3D Object3D::VectorMutiplication(Point3D v1, Point3D v2)
     x = v1.y * v2.z - v2.y * v1.z;
     y = v1.x * v2.z - v2.x * v1.z;
     z = v1.x * v2.y - v2.x * v1.y;
+
     return Point3D(x, -y, z);
 }
 

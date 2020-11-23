@@ -22,26 +22,42 @@ void MainWindow::addCoordinates()
     scene3D.setWindowCoordinates(width(), height());
     scene3D.StartObject();
 
-    // puncte spate
-    scene3D.AddPointToObject(Point3D(-50, 30, 0)); // 0
-    scene3D.AddPointToObject(Point3D(-200, 30, 0)); // 1
-    scene3D.AddPointToObject(Point3D(-200, 170, 0)); // 2
-    scene3D.AddPointToObject(Point3D(-50, 170, 0)); // 3
+//    // puncte spate
+//    scene3D.AddPointToObject(Point3D(-50, 30, 0)); // 0
+//    scene3D.AddPointToObject(Point3D(-200, 30, 0)); // 1
+//    scene3D.AddPointToObject(Point3D(-200, 170, 0)); // 2
+//    scene3D.AddPointToObject(Point3D(-50, 170, 0)); // 3
 
-    // puncte fata
-    scene3D.AddPointToObject(Point3D(-50, 30, 140)); // 4
-    scene3D.AddPointToObject(Point3D(-200, 30, 140)); // 5
-    scene3D.AddPointToObject(Point3D(-200, 170, 140)); // 6
-    scene3D.AddPointToObject(Point3D(-50, 170, 140)); // 7
+//    // puncte fata
+//    scene3D.AddPointToObject(Point3D(-50, 30, 140)); // 4
+//    scene3D.AddPointToObject(Point3D(-200, 30, 140)); // 5
+//    scene3D.AddPointToObject(Point3D(-200, 170, 140)); // 6
+//    scene3D.AddPointToObject(Point3D(-50, 170, 140)); // 7
 
-    // perete spate
-    scene3D.AddPolygonToObject({ 0, 1, 2, 3 }, 255);
-    // perete fata
-    scene3D.AddPolygonToObject({ 4, 5, 6, 7 }, 255);
-    // perete sus
-    scene3D.AddPolygonToObject({ 0, 1, 5, 4 }, 255);
-    // perete jos
-    scene3D.AddPolygonToObject({ 3, 2, 6, 7 }, 255);
+//    // perete spate
+//    scene3D.AddPolygonToObject({ 0, 1, 2, 3 }, 255);
+//    // perete fata
+//    scene3D.AddPolygonToObject({ 4, 5, 6, 7 }, 255);
+//    // perete sus
+//    scene3D.AddPolygonToObject({ 0, 1, 5, 4 }, 255);
+//    // perete jos
+//    scene3D.AddPolygonToObject({ 3, 2, 6, 7 }, 255);
+
+    scene3D.AddPointToObject(Point3D(-100, -100, -700));
+    scene3D.AddPointToObject(Point3D(100, -100, -700));
+    scene3D.AddPointToObject(Point3D(-100, 100, -700));
+    scene3D.AddPointToObject(Point3D(100, 100, -700));
+    scene3D.AddPointToObject(Point3D(-100, -100, -900));
+    scene3D.AddPointToObject(Point3D(100, -100, -900));
+    scene3D.AddPointToObject(Point3D(-100, 100, -900));
+    scene3D.AddPointToObject(Point3D(100, 100, -900));
+
+    scene3D.AddPolygonToObject({ 0, 1, 3, 2}, 123);
+    scene3D.AddPolygonToObject({ 1, 5, 7, 3}, 255);
+    scene3D.AddPolygonToObject({ 4, 6, 7, 5}, 255);
+    scene3D.AddPolygonToObject({ 0, 2, 6, 4}, 255);
+    scene3D.AddPolygonToObject({ 0, 4, 5, 1}, 255);
+    scene3D.AddPolygonToObject({ 2, 3, 7, 6}, 255);
 
     scene3D.FinishObject();
 }
