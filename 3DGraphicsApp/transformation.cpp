@@ -30,7 +30,7 @@ void Transformation::matrixMultiplication(double m[4][4])
         for(int j=0; j<4; j++)
            t[i][j]=r[i][j];
 
-    PrintMatrix(t);
+    //PrintMatrix(t);
 }
 
 void Transformation::ScaleOrigin(double sx, double sy, double sz)
@@ -140,8 +140,8 @@ void Transformation::RotateOy(double gama, Point3D axis)
 
 void Transformation::ApplyTransformation(double x, double y, double z, double& xp, double& yp, double& zp)
 {
-    qDebug()<<"Inainte de aplicare";
-    PrintMatrix(t);
+//    qDebug()<<"Inainte de aplicare";
+//    PrintMatrix(t);
     xp = t[0][0] * x + t[0][1] * y + t[0][2] * z + t[0][3];
     yp = t[1][0] * x + t[1][1] * y + t[1][2] * z + t[1][3];
     zp = t[2][0] * x + t[2][1] * y + t[2][2] * z + t[2][3];

@@ -13,6 +13,7 @@ class Object3D
     double zp = 1000;
     double ambientLight = 0.2f;
     int wWidth, wHeight;
+    Point3D lightVector = Point3D(-250, 250, 250);
 
     QVector<Point3D> m_points3D;
     QVector<QPoint> m_points2D;
@@ -26,9 +27,10 @@ class Object3D
     bool IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2);
     bool IsIlluminated(Point3D A0, Point3D A1, Point3D A2);
     Point3D VectorMutiplication(Point3D v1, Point3D v2);
-    int GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2);
+    double GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2);
     double VectorNorm(Point3D v);
     double ScalarMultiplication(Point3D v1, Point3D v2);
+    Point3D GetPolygonNormal(Point3D A0, Point3D A1, Point3D A2);
 public:
     Object3D();
     void setWindowCoordinates(int width, int height);

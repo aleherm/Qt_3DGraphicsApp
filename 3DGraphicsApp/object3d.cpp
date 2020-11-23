@@ -17,46 +17,34 @@ QPoint Object3D::PerspectiveProjection(Point3D p3D)
 bool Object3D::IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2)
 {
     Point3D PA0(A0.x, A0.y, A0.z - zp);
-    Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
-    Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
-    Point3D N = VectorMutiplication(A0A2, A0A1);
-    double result = ScalarMultiplication(PA0, N);
-    if(result > 0)
+    Point3D N = GetPolygonNormal(A0, A1, A2);
+
+    double visibility = ScalarMultiplication(PA0, N);
+    if(visibility > 0)
         return true; // se afiseaza
     return false;
 }
 
 bool Object3D::IsIlluminated(Point3D A0, Point3D A1, Point3D A2)
 {
-    Point3D PA0(A0.x, A0.y, A0.z - zp);
-    Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
-    Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
+    Point3D N = GetPolygonNormal(A0, A1, A2);
 
-    Point3D N = VectorMutiplication(A0A2, A0A1);
-    Point3D lightVector(0, 0, zp);
+    double lightSource = ScalarMultiplication(lightVector, N);
 
-    double pointSource = lightVector.x * N.x + lightVector.y * N.y + lightVector.z * N.z;
-
-    if(pointSource < 0 )
-        return true; // culoare de iluminare generata
-    return false; // se coloreaza negru
+    if(lightSource >= 0)
+        return true; // se coloreaza cu k * C0
+    return false;
 }
 
-int Object3D::GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2)
+double Object3D::GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2)
 {
-    Point3D PA0(A0.x, A0.y, A0.z - zp);
-    Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
-    Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
-
-    Point3D N = VectorMutiplication(A0A2, A0A1);
-
-    Point3D lightVector(0, 0, zp);
+    Point3D N = GetPolygonNormal(A0, A1, A2);
 
     double normCross = VectorNorm(lightVector) * VectorNorm(N);
     double cosVector = ScalarMultiplication(lightVector, N) / normCross;
 
-    double result = (1.0 - ambientLight) * cosVector + ambientLight;
-    return (int)result;
+    double result = ambientLight + (1.0 - ambientLight) * cosVector; // k + (1 - k) * cos(v1, N)
+    return result;
 }
 
 void Object3D::Display(QPainter &painter)
@@ -68,8 +56,8 @@ void Object3D::Display(QPainter &painter)
         Point3D P1(m_points3D[m_polygonIndices[i][1]]);
         Point3D P2(m_points3D[m_polygonIndices[i][2]]);
         bool isVisible = this->IsVisiblePolygon(P0, P1, P2);
-        //bool isIlluminated = this->IsIlluminated(P0, P1, P2);
-        //double colorFactor = GetIlluminatingColor(P0, P1, P2);
+        bool isIlluminated = this->IsIlluminated(P0, P1, P2);
+        double colorFactor = GetIlluminatingColor(P0, P1, P2);
 
         if(!isVisible)
             continue;
@@ -84,13 +72,13 @@ void Object3D::Display(QPainter &painter)
 
         int color = this->m_colors[i];
 
-//        if (isIlluminated)
-//            color *= ambientLight;
-//        else
-//            color = color * colorFactor;
+        if (isIlluminated)
+            color = color * ambientLight;
+        else
+            color = color * colorFactor;
 
-//        painter.setPen(Qt::black);
-//        painter.setBrush(QBrush(QColor(color, color, color)));
+        painter.setPen(Qt::black);
+        painter.setBrush(QBrush(QColor(color, color, color)));
         painter.drawPolygon(points, m_polygonIndices[i].size());
     }
 }
@@ -198,6 +186,17 @@ double Object3D::ScalarMultiplication(Point3D v1, Point3D v2)
     return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 }
 
+Point3D Object3D::GetPolygonNormal(Point3D A0, Point3D A1, Point3D A2)
+{
+    Point3D PA0(A0.x, A0.y, A0.z - zp);
+    Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
+    Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
+
+    Point3D N = VectorMutiplication(A0A2, A0A1);
+
+    return N;
+}
+
 double Object3D::VectorNorm(Point3D v)
 {
     return sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
@@ -258,6 +257,14 @@ void Object3D::ZBufferingDisplay(QPainter& painter)
     int index;
     for (int i = 0; i < newPolygonIndices.size(); i++)
     {
+        Point3D P0(m_points3D[newPolygonIndices[i][0]]);
+        Point3D P1(m_points3D[newPolygonIndices[i][1]]);
+        Point3D P2(m_points3D[newPolygonIndices[i][2]]);
+        bool isVisible = this->IsVisiblePolygon(P0, P1, P2);
+
+        if(!isVisible)
+            continue;
+
         QPoint points[4];
         int  j;
         for (j = 0; j < newPolygonIndices[i].size(); j++)

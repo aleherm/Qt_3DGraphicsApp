@@ -22,37 +22,19 @@ void MainWindow::addCoordinates()
     scene3D.setWindowCoordinates(width(), height());
     scene3D.StartObject();
 
-//    // puncte spate
-//    scene3D.AddPointToObject(Point3D(-50, 30, 0)); // 0
-//    scene3D.AddPointToObject(Point3D(-200, 30, 0)); // 1
-//    scene3D.AddPointToObject(Point3D(-200, 170, 0)); // 2
-//    scene3D.AddPointToObject(Point3D(-50, 170, 0)); // 3
-
-//    // puncte fata
-//    scene3D.AddPointToObject(Point3D(-50, 30, 140)); // 4
-//    scene3D.AddPointToObject(Point3D(-200, 30, 140)); // 5
-//    scene3D.AddPointToObject(Point3D(-200, 170, 140)); // 6
-//    scene3D.AddPointToObject(Point3D(-50, 170, 140)); // 7
-
-//    // perete spate
-//    scene3D.AddPolygonToObject({ 0, 1, 2, 3 }, 255);
-//    // perete fata
-//    scene3D.AddPolygonToObject({ 4, 5, 6, 7 }, 255);
-//    // perete sus
-//    scene3D.AddPolygonToObject({ 0, 1, 5, 4 }, 255);
-//    // perete jos
-//    scene3D.AddPolygonToObject({ 3, 2, 6, 7 }, 255);
-
+    // puncte fata
     scene3D.AddPointToObject(Point3D(-100, -100, -700));
     scene3D.AddPointToObject(Point3D(100, -100, -700));
     scene3D.AddPointToObject(Point3D(-100, 100, -700));
     scene3D.AddPointToObject(Point3D(100, 100, -700));
+
+    // puncte spate
     scene3D.AddPointToObject(Point3D(-100, -100, -900));
     scene3D.AddPointToObject(Point3D(100, -100, -900));
     scene3D.AddPointToObject(Point3D(-100, 100, -900));
     scene3D.AddPointToObject(Point3D(100, 100, -900));
 
-    scene3D.AddPolygonToObject({ 0, 1, 3, 2}, 123);
+    scene3D.AddPolygonToObject({ 0, 1, 3, 2}, 255);
     scene3D.AddPolygonToObject({ 1, 5, 7, 3}, 255);
     scene3D.AddPolygonToObject({ 4, 6, 7, 5}, 255);
     scene3D.AddPolygonToObject({ 0, 2, 6, 4}, 255);
@@ -72,7 +54,10 @@ void MainWindow::paintEvent(QPaintEvent *e)
     }
     else
     {
-        painter.drawText(rect(), Qt::AlignCenter, message);
+        QFont bold("Verdana", 20);
+        bold.setBold(true);
+        painter.setFont(bold);
+        painter.drawText(rect(), Qt::AlignHCenter, message);
         if(isZBuffering)
         {
             scene3D.ZBufferingDisplay(painter);
@@ -88,64 +73,78 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     // translatii
     if(event->key() == Qt::Key_W)
     {
+        this->message = "Move UP";
         scene3D.Translate(0, -10, 0);
     }
     if(event->key() == Qt::Key_S)
     {
+        this->message = "Move DOWN";
         scene3D.Translate(0, 10, 0);
     }
     if(event->key() == Qt::Key_D)
     {
+        this->message = "Move RIGHT";
         scene3D.Translate(10, 0, 0);
     }
     if(event->key() == Qt::Key_A)
     {
+        this->message = "Move LEFT";
         scene3D.Translate(-10, 0, 0);
     }
 
     // scalari
     if(event->key() == Qt::Key_Plus)
     {
+        this->message = "Zoom In";
         scene3D.ScaleOrigin(1.1, 1.1, 1.1);
     }
     if(event->key() == Qt::Key_Minus)
     {
+        this->message = "Zoom Out";
         scene3D.ScaleOrigin(0.9, 0.9, 0.9);
     }
 
     if(event->key() == Qt::Key_O)
     {
+        this->message = "Zoom Out - POINT";
         scene3D.ScalePoint(0.9, 0.9, 0.9, Point3D(100, 100, 100));
     }
 
     if(event->key() == Qt::Key_P)
     {
+        this->message = "Zoom In - POINT";
         scene3D.ScalePoint(1.1, 1.1, 1.1, Point3D(100, 100, 100));
     }
 
     // rotatii
-    if(event->key() == Qt::Key_Right)
+    if(event->key() == Qt::Key_Period)
     {
+        this->message = "OZ Rotation - RIGHT";
         scene3D.RotateOz(0.1);
     }
-    if(event->key() == Qt::Key_Left)
+    if(event->key() == Qt::Key_Comma)
     {
+        this->message = "OZ Rotation - LEFT";
         scene3D.RotateOz(-0.1);
     }
     if(event->key() == Qt::Key_Up)
     {
+        this->message = "OX Rotation - UP";
         scene3D.RotateOx(0.1);
     }
     if(event->key() == Qt::Key_Down)
     {
+        this->message = "OX Rotation - DOWN";
         scene3D.RotateOx(-0.1);
     }
-    if(event->key() == Qt::Key_Comma)
+    if(event->key() == Qt::Key_Left)
     {
+        this->message = "OY Rotation - LEFT";
         scene3D.RotateOy(0.1);
     }
-    if(event->key() == Qt::Key_Period)
+    if(event->key() == Qt::Key_Right)
     {
+        this->message = "OY Rotation - RIGHT";
         scene3D.RotateOy(-0.1);
     }
 
@@ -168,17 +167,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     if(event->key() == Qt::Key_4)
     {
-        this->message = "Ox symmetry";
+        this->message = "OX symmetry";
         scene3D.Symmetry(1, -1, -1);
     }
     if(event->key() == Qt::Key_5)
     {
-        this->message = "Oy symmetry";
+        this->message = "OY symmetry";
         scene3D.Symmetry(-1, 1, -1);
     }
     if(event->key() == Qt::Key_6)
     {
-        this->message = "Oz symmetry";
+        this->message = "OZ symmetry";
         scene3D.Symmetry(-1, -1, 1);
     }
     if(event->key() == Qt::Key_7)
@@ -189,7 +188,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     if(event->key() == Qt::Key_Q)
     {
-        this->message = "plane symmetry";
+        this->message = "Plane symmetry";
         scene3D.SymmetryPlane(10, 10, 0, 0.1, 0.1);
     }
 
