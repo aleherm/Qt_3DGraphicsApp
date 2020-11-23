@@ -15,7 +15,7 @@ public:
     void Display(QPainter& painter);
     void StartObject();
     void AddPointToObject(Point3D p3D);
-    void AddPolygonToObject(QVector<int> indices, int color);
+    void AddPolygonToObject(QVector<int> indices, QColor color);
     void FinishObject();
     void ApplyTransformation(Transformation transf);
 

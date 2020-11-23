@@ -31,20 +31,31 @@ bool Object3D::IsIlluminated(Point3D A0, Point3D A1, Point3D A2)
 
     double lightSource = ScalarMultiplication(lightVector, N);
 
-    if(lightSource >= 0)
-        return true; // se coloreaza cu k * C0
-    return false;
+    if(lightSource < 0)
+        return true;
+    return false; // se coloreaza negru
 }
 
-double Object3D::GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2)
+double Object3D::GetIlluminatingFactor(Point3D A0, Point3D A1, Point3D A2)
 {
     Point3D N = GetPolygonNormal(A0, A1, A2);
 
     double normCross = VectorNorm(lightVector) * VectorNorm(N);
     double cosVector = ScalarMultiplication(lightVector, N) / normCross;
 
-    double result = ambientLight + (1.0 - ambientLight) * cosVector; // k + (1 - k) * cos(v1, N)
+    if(cosVector < 0)
+        cosVector *= -1;
+
+    double result = (1.0 - ambientLight) * cosVector; // k + (1 - k) * |cos(v1, N)|^alfa
     return result;
+}
+
+QColor Object3D::GetAmbientalColor(QColor color, double illuminatingFactor)
+{
+    int R = color.red() * (ambientLight + illuminatingFactor);
+    int G = color.green() * (ambientLight + illuminatingFactor);
+    int B = color.green() * (ambientLight + illuminatingFactor);
+    return QColor(R, G, B);
 }
 
 void Object3D::Display(QPainter &painter)
@@ -55,10 +66,8 @@ void Object3D::Display(QPainter &painter)
         Point3D P0(m_points3D[m_polygonIndices[i][0]]);
         Point3D P1(m_points3D[m_polygonIndices[i][1]]);
         Point3D P2(m_points3D[m_polygonIndices[i][2]]);
-        bool isVisible = this->IsVisiblePolygon(P0, P1, P2);
-        bool isIlluminated = this->IsIlluminated(P0, P1, P2);
-        double colorFactor = GetIlluminatingColor(P0, P1, P2);
 
+        bool isVisible = this->IsVisiblePolygon(P0, P1, P2);
         if(!isVisible)
             continue;
 
@@ -70,15 +79,29 @@ void Object3D::Display(QPainter &painter)
             points[j] = m_points2D[index];
         }
 
-        int color = this->m_colors[i];
+        QColor color = this->m_colors[i];
+        int red = color.red();
+        int green = color.green();
+        int blue = color.blue();
 
+        QColor newColor;
+
+        bool isIlluminated = this->IsIlluminated(P0, P1, P2);
         if (isIlluminated)
-            color = color * ambientLight;
+        {
+            double illuminatingFactor = GetIlluminatingFactor(P0, P1, P2);
+            newColor = GetAmbientalColor(color, illuminatingFactor);
+            red = newColor.red();
+            green = newColor.green();
+            blue = newColor.blue();
+        }
         else
-            color = color * colorFactor;
+        {
+            newColor = QColor(color.red() * ambientLight, color.green() * ambientLight, color.blue() * ambientLight);
+        }
 
-        painter.setPen(Qt::black);
-        painter.setBrush(QBrush(QColor(color, color, color)));
+        painter.setPen(QColor(newColor));
+        painter.setBrush(QBrush(newColor));
         painter.drawPolygon(points, m_polygonIndices[i].size());
     }
 }
@@ -90,7 +113,7 @@ void Object3D::AddPoint3D(Point3D p3D)
 }
 
 //Object3D = mai multe poligoane (de culori diferite?)
-void Object3D::AddPolygon(QVector<int> polygonIndices, int color)
+void Object3D::AddPolygon(QVector<int> polygonIndices, QColor color)
 {
     m_polygonIndices.push_back(polygonIndices);
     m_colors.push_back(color);
@@ -192,7 +215,7 @@ Point3D Object3D::GetPolygonNormal(Point3D A0, Point3D A1, Point3D A2)
     Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
     Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
 
-    Point3D N = VectorMutiplication(A0A2, A0A1);
+    Point3D N = VectorMutiplication(A0A2, A0A1); // cross product
 
     return N;
 }
@@ -273,9 +296,8 @@ void Object3D::ZBufferingDisplay(QPainter& painter)
             points[j] = m_points2D[index];
         }
 
-        int color = this->m_colors[i];
-        painter.setPen(Qt::darkGreen);
-        painter.setBrush(QBrush(QColor(color, color, color)));
+        QColor color = this->m_colors[i];
+        painter.setBrush(QBrush(color));
         painter.drawPolygon(points, newPolygonIndices[i].size());
     }
 }

@@ -3,6 +3,7 @@
 #include <QPoint>
 #include <QVector>
 #include <QPainter>
+#include <QColor>
 #include "point3d.h"
 #include "transformation.h"
 #include "math.h"
@@ -10,8 +11,8 @@
 
 class Object3D
 {
-    double zp = 1000;
-    double ambientLight = 0.2f;
+    double zp = 1000, alfa = 2;
+    float ambientLight = 0.2;
     int wWidth, wHeight;
     Point3D lightVector = Point3D(-250, 250, 250);
 
@@ -19,7 +20,7 @@ class Object3D
     QVector<QPoint> m_points2D;
 
     QVector<QVector<int>> m_polygonIndices;
-    QVector<int> m_colors;
+    QVector<QColor> m_colors;
 
     Transformation transformation3D;
 
@@ -27,17 +28,18 @@ class Object3D
     bool IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2);
     bool IsIlluminated(Point3D A0, Point3D A1, Point3D A2);
     Point3D VectorMutiplication(Point3D v1, Point3D v2);
-    double GetIlluminatingColor(Point3D A0, Point3D A1, Point3D A2);
+    double GetIlluminatingFactor(Point3D A0, Point3D A1, Point3D A2);
     double VectorNorm(Point3D v);
     double ScalarMultiplication(Point3D v1, Point3D v2);
     Point3D GetPolygonNormal(Point3D A0, Point3D A1, Point3D A2);
+    QColor GetAmbientalColor(QColor color, double lightFactor);
 public:
     Object3D();
     void setWindowCoordinates(int width, int height);
 
     // specific
     void AddPoint3D(Point3D p3D);
-    void AddPolygon(QVector<int> polygonIndices, int color);
+    void AddPolygon(QVector<int> polygonIndices, QColor color);
 
     void Translate(double dx, double dy, double dz);
 

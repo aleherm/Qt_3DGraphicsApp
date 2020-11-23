@@ -21,7 +21,7 @@ void Scene3D::AddPointToObject(Point3D p3D)
     m_currentObject.AddPoint3D(p3D);
 }
 
-void Scene3D::AddPolygonToObject(QVector<int> indices, int color)
+void Scene3D::AddPolygonToObject(QVector<int> indices, QColor color)
 {
     m_currentObject.AddPolygon(indices, color);
 }

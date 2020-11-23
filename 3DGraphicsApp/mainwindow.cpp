@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
+#include <QColor>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,12 +35,12 @@ void MainWindow::addCoordinates()
     scene3D.AddPointToObject(Point3D(-100, 100, -900));
     scene3D.AddPointToObject(Point3D(100, 100, -900));
 
-    scene3D.AddPolygonToObject({ 0, 1, 3, 2}, 255);
-    scene3D.AddPolygonToObject({ 1, 5, 7, 3}, 255);
-    scene3D.AddPolygonToObject({ 4, 6, 7, 5}, 255);
-    scene3D.AddPolygonToObject({ 0, 2, 6, 4}, 255);
-    scene3D.AddPolygonToObject({ 0, 4, 5, 1}, 255);
-    scene3D.AddPolygonToObject({ 2, 3, 7, 6}, 255);
+    scene3D.AddPolygonToObject({ 0, 1, 3, 2}, QColor(34,139,34));
+    scene3D.AddPolygonToObject({ 1, 5, 7, 3}, QColor(34,139,34));
+    scene3D.AddPolygonToObject({ 4, 6, 7, 5}, QColor(34,139,34));
+    scene3D.AddPolygonToObject({ 0, 2, 6, 4}, QColor(34,139,34));
+    scene3D.AddPolygonToObject({ 0, 4, 5, 1}, QColor(34,139,34));
+    scene3D.AddPolygonToObject({ 2, 3, 7, 6}, QColor(34,139,34));
 
     scene3D.FinishObject();
 }
