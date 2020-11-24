@@ -2,6 +2,8 @@
 
 Qt_3DGraphicsApp is a C++ Framework for 3D graphic design.
 
+![image info](./pictures/app.png)
+
 ## Usage -> keyboard
 
 ```C++

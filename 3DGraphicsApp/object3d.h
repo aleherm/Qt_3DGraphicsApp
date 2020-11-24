@@ -14,7 +14,7 @@ class Object3D
     double zp = 1000, alfa = 2;
     float ambientLight = 0.2;
     int wWidth, wHeight;
-    Point3D lightVector = Point3D(-150, 150, 150);
+    Point3D lightVector = Point3D(-50, 50, 150);
 
     QVector<Point3D> m_points3D;
     QVector<QPoint> m_points2D;
