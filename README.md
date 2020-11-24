@@ -1,7 +1,4 @@
 # Qt_3DGraphicsApp
-Framework de proiectare grafica 3D realizat in Qt cu ajutorul limbajului de programare C++.
-
-# Qt_3DGraphicsApp
 
 Qt_3DGraphicsApp is a C++ Framework for 3D graphic design.
 
