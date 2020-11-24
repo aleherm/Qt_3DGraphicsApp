@@ -19,7 +19,7 @@ bool Object3D::IsVisiblePolygon(Point3D A0, Point3D A1, Point3D A2)
     Point3D PA0(A0.x, A0.y, A0.z - zp);
     Point3D N = GetPolygonNormal(A0, A1, A2);
 
-    double visibility = ScalarMultiplication(PA0, N);
+    double visibility = CrossProduct(PA0, N);
     if(visibility > 0)
         return true; // se afiseaza
     return false;
@@ -29,7 +29,7 @@ bool Object3D::IsIlluminated(Point3D A0, Point3D A1, Point3D A2)
 {
     Point3D N = GetPolygonNormal(A0, A1, A2);
 
-    double lightSource = ScalarMultiplication(lightVector, N);
+    double lightSource = CrossProduct(lightVector, N);
 
     if(lightSource < 0)
         return true;
@@ -41,20 +41,20 @@ double Object3D::GetIlluminatingFactor(Point3D A0, Point3D A1, Point3D A2)
     Point3D N = GetPolygonNormal(A0, A1, A2);
 
     double normCross = VectorNorm(lightVector) * VectorNorm(N);
-    double cosVector = ScalarMultiplication(lightVector, N) / normCross;
+    double cosVector = CrossProduct(lightVector, N) / normCross;
 
     if(cosVector < 0)
         cosVector *= -1;
 
-    double result = (1.0 - ambientLight) * cosVector; // k + (1 - k) * |cos(v1, N)|^alfa
+    double result = ambientLight + (1.0 - ambientLight) * cosVector; // k + (1 - k) * |cos(v1, N)|^alfa
     return result;
 }
 
 QColor Object3D::GetAmbientalColor(QColor color, double illuminatingFactor)
 {
-    int R = color.red() * (ambientLight + illuminatingFactor);
-    int G = color.green() * (ambientLight + illuminatingFactor);
-    int B = color.green() * (ambientLight + illuminatingFactor);
+    int R = color.red() * illuminatingFactor;
+    int G = color.green() * illuminatingFactor;
+    int B = color.green() *  illuminatingFactor;
     return QColor(R, G, B);
 }
 
@@ -80,9 +80,6 @@ void Object3D::Display(QPainter &painter)
         }
 
         QColor color = this->m_colors[i];
-        int red = color.red();
-        int green = color.green();
-        int blue = color.blue();
 
         QColor newColor;
 
@@ -91,13 +88,10 @@ void Object3D::Display(QPainter &painter)
         {
             double illuminatingFactor = GetIlluminatingFactor(P0, P1, P2);
             newColor = GetAmbientalColor(color, illuminatingFactor);
-            red = newColor.red();
-            green = newColor.green();
-            blue = newColor.blue();
         }
         else
         {
-            newColor = QColor(color.red() * ambientLight, color.green() * ambientLight, color.blue() * ambientLight);
+            newColor = GetAmbientalColor(color, ambientLight);
         }
 
         painter.setPen(QColor(newColor));
@@ -112,7 +106,6 @@ void Object3D::AddPoint3D(Point3D p3D)
     m_points2D.push_back(PerspectiveProjection(p3D));
 }
 
-//Object3D = mai multe poligoane (de culori diferite?)
 void Object3D::AddPolygon(QVector<int> polygonIndices, QColor color)
 {
     m_polygonIndices.push_back(polygonIndices);
@@ -194,7 +187,7 @@ void Object3D::ApplyTransformation()
     }
 }
 
-Point3D Object3D::VectorMutiplication(Point3D v1, Point3D v2)
+Point3D Object3D::VectorialProduct(Point3D v1, Point3D v2)
 {
     double x, y, z;
     x = v1.y * v2.z - v2.y * v1.z;
@@ -204,7 +197,7 @@ Point3D Object3D::VectorMutiplication(Point3D v1, Point3D v2)
     return Point3D(x, -y, z);
 }
 
-double Object3D::ScalarMultiplication(Point3D v1, Point3D v2)
+double Object3D::CrossProduct(Point3D v1, Point3D v2)
 {
     return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 }
@@ -215,7 +208,7 @@ Point3D Object3D::GetPolygonNormal(Point3D A0, Point3D A1, Point3D A2)
     Point3D A0A1(A1.x - A0.x, A1.y - A0.y, A1.z - A0.z);
     Point3D A0A2(A2.x - A0.x, A2.y - A0.y, A2.z - A0.z);
 
-    Point3D N = VectorMutiplication(A0A2, A0A1); // cross product
+    Point3D N = VectorialProduct(A0A2, A0A1); // cross product
 
     return N;
 }
@@ -300,6 +293,26 @@ void Object3D::ZBufferingDisplay(QPainter& painter)
         painter.setBrush(QBrush(color));
         painter.drawPolygon(points, newPolygonIndices[i].size());
     }
+}
+
+void Object3D::CutObject()
+{
+//    bool canBeCut = false;
+//    for(int i = 0; i < m_points3D.size() - 1; i++)
+//    {
+//        Point3D currentPoint = m_points3D[i];
+//        Point3D nextPoint = m_points3D[i+1];
+//        if(currentPoint.z * nextPoint.z < 0)
+//            canBeCut = true;
+
+//        if(canBeCut)
+//        {
+//            double Ix = currentPoint.x - currentPoint.z * ((nextPoint.x - currentPoint.x) / (nextPoint.z - currentPoint.z));
+//            double Iy = currentPoint.y - currentPoint.z * ((nextPoint.y - currentPoint.y) / (nextPoint.z - currentPoint.z));
+//            Point3D pointOfIncidence;
+
+//        }
+//    }
 }
 
 void Object3D::setWindowCoordinates(int width, int height)

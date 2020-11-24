@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::addCoordinates()
 {
-    scene3D.setWindowCoordinates(width(), height());
+    scene3D.SetWindowCoordinates(width(), height());
     scene3D.StartObject();
 
     // puncte fata
@@ -96,12 +96,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     // scalari
     if(event->key() == Qt::Key_Plus)
     {
-        this->message = "Zoom In";
+        this->message = "Zoom In - ORIGIN";
         scene3D.ScaleOrigin(1.1, 1.1, 1.1);
     }
     if(event->key() == Qt::Key_Minus)
     {
-        this->message = "Zoom Out";
+        this->message = "Zoom Out - ORIGIN";
         scene3D.ScaleOrigin(0.9, 0.9, 0.9);
     }
 
@@ -183,13 +183,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
     if(event->key() == Qt::Key_7)
     {
-        this->message = "O symmetry";
+        this->message = "ORIGIN symmetry";
         scene3D.Symmetry(-1, -1, -1);
     }
 
     if(event->key() == Qt::Key_Q)
     {
-        this->message = "Plane symmetry";
+        this->message = "PLANE symmetry";
         scene3D.SymmetryPlane(10, 10, 0, 0.1, 0.1);
     }
 

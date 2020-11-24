@@ -16,7 +16,7 @@ void Transformation::Reset(double m[4][4])
                 m[i][j]=0;
 }
 
-void Transformation::matrixMultiplication(double m[4][4])
+void Transformation::MatrixMultiplication(double m[4][4])
 {
     double r[4][4];
     for(int i=0; i<4; i++)
@@ -42,7 +42,7 @@ void Transformation::ScaleOrigin(double sx, double sy, double sz)
     m[1][1]=sy;
     m[2][2]=sz;
 
-    matrixMultiplication(m);
+    MatrixMultiplication(m);
 }
 
 void Transformation::ScalePoint(double sx, double sy, double sz, Point3D point)
@@ -89,7 +89,7 @@ void Transformation::Translate(double dx, double dy, double dz)
     m[2][3] = dz;
 
     qDebug()<<"Translatie";
-    matrixMultiplication(m);
+    MatrixMultiplication(m);
 }
 
 //xOy
@@ -103,7 +103,7 @@ void Transformation::RotateOz(double alfa, Point3D axis)
     m[0][1] = -sin(alfa);
     m[1][0] = sin(alfa);
     m[1][1] = cos(alfa);
-    matrixMultiplication(m);
+    MatrixMultiplication(m);
 
     this->Translate(axis.x, axis.y, axis.z);
 }
@@ -118,7 +118,7 @@ void Transformation::RotateOx(double beta, Point3D axis)
     m[1][2] = -sin(beta);
     m[2][1] = sin(beta);
     m[2][2] = cos(beta);
-    matrixMultiplication(m);
+    MatrixMultiplication(m);
 
     this->Translate(axis.x, axis.y, axis.z);
 }
@@ -133,7 +133,7 @@ void Transformation::RotateOy(double gama, Point3D axis)
     m[0][2] = -sin(gama);
     m[2][0] = sin(gama);
     m[2][2] = cos(gama);
-    matrixMultiplication(m);
+    MatrixMultiplication(m);
 
     this->Translate(axis.x, axis.y, axis.z);
 }

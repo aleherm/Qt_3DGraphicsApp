@@ -7,18 +7,21 @@
 
 class Scene3D
 {
-    QVector<Object3D> m_objects3D;
-    Object3D m_currentObject;
+    QVector<Object3D> m_objects3D; // vectorul de obiecte
+    Object3D m_currentObject; // obiectul curent
 public:
     Scene3D();
-    Scene3D(int w, int h);
-    void Display(QPainter& painter);
+
     void StartObject();
     void AddPointToObject(Point3D p3D);
     void AddPolygonToObject(QVector<int> indices, QColor color);
     void FinishObject();
+    void Display(QPainter& painter);
+
+    void SetWindowCoordinates(int width, int height);
     void ApplyTransformation(Transformation transf);
 
+    // transformari
     void Translate(double dx, double dy, double dz);
 
     void ScaleOrigin(double sx, double sy, double sz);
@@ -30,18 +33,6 @@ public:
 
     void Symmetry(double sx, double sy, double sz);
     void SymmetryPlane(double sx, double sy, double sz, double alfa, double beta);
-
-    void setWindowCoordinates(int width, int height);
-
-    QVector<Object3D> GetObjects3D()
-    {
-        return this->m_objects3D;
-    }
-
-    void SetObjects3D(QVector<Object3D> objects3D)
-    {
-        this->m_objects3D = objects3D;
-    }
 
     void ZBufferingDisplay(QPainter& painter);
 };

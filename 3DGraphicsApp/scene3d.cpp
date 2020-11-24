@@ -79,7 +79,7 @@ void Scene3D::SymmetryPlane(double sx, double sy, double sz, double alfa, double
         ob.SymmetryPlane(sx, sy, sz, alfa, beta);
 }
 
-void Scene3D::setWindowCoordinates(int width, int height)
+void Scene3D::SetWindowCoordinates(int width, int height)
 {
     m_currentObject.setWindowCoordinates(width, height);
 }
