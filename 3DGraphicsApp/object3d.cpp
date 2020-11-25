@@ -61,42 +61,46 @@ QColor Object3D::GetAmbientalColor(QColor color, double illuminatingFactor)
 void Object3D::Display(QPainter &painter)
 {
     int index;
+    Point3D P0, P1, P2;
     for (int i = 0; i < m_polygonIndices.size(); i++)
     {
-        Point3D P0(m_points3D[m_polygonIndices[i][0]]);
-        Point3D P1(m_points3D[m_polygonIndices[i][1]]);
-        Point3D P2(m_points3D[m_polygonIndices[i][2]]);
+        bool isPolygon = false;
+        if(m_polygonIndices[i].size() >= 3)
+            isPolygon = true;
 
-        bool isVisible = this->IsVisiblePolygon(P0, P1, P2);
-        if(!isVisible)
-            continue;
-
-        QPoint points[4];
-        int  j;
-        for (j = 0; j < m_polygonIndices[i].size(); j++)
+        QVector<QPoint> points;
+        for (int j = 0; j < m_polygonIndices[i].size(); j++)
         {
             index = m_polygonIndices[i][j];
-            points[j] = m_points2D[index];
+            points.push_back(m_points2D[index]);
         }
 
-        QColor color = this->m_colors[i];
-
-        QColor newColor;
-
-        bool isIlluminated = this->IsIlluminated(P0, P1, P2);
-        if (isIlluminated)
+        QColor newColor, color = this->m_colors[i];
+        if(isPolygon)
         {
-            double illuminatingFactor = GetIlluminatingFactor(P0, P1, P2);
-            newColor = GetAmbientalColor(color, illuminatingFactor);
-        }
-        else
-        {
-            newColor = GetAmbientalColor(color, ambientLight);
+            P0 = Point3D(m_points3D[m_polygonIndices[i][0]]);
+            P1 = Point3D(m_points3D[m_polygonIndices[i][1]]);
+            P2 = Point3D(m_points3D[m_polygonIndices[i][2]]);
+
+            bool isVisible = this->IsVisiblePolygon(P0, P1, P2);
+            if(!isVisible)
+                continue;
+
+            bool isIlluminated = this->IsIlluminated(P0, P1, P2);
+            if (isIlluminated)
+            {
+                double illuminatingFactor = GetIlluminatingFactor(P0, P1, P2);
+                newColor = GetAmbientalColor(color, illuminatingFactor);
+            }
+            else
+            {
+                newColor = GetAmbientalColor(color, ambientLight);
+            }
         }
 
         painter.setPen(QColor(newColor));
         painter.setBrush(QBrush(newColor));
-        painter.drawPolygon(points, m_polygonIndices[i].size());
+        painter.drawPolygon(QPolygon(points));
     }
 }
 

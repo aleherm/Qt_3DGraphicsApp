@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QColor>
+#include <QtMath>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     this->start=true;
     this->isZBuffering = false;
-    this->addCoordinates();
+    //this->MakeCube();
+    this->MakeSphere();
     ui->setupUi(this);
 }
 
@@ -18,7 +20,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::addCoordinates()
+void MainWindow::MakeCube()
 {
     scene3D.SetWindowCoordinates(width(), height());
     scene3D.StartObject();
@@ -41,6 +43,109 @@ void MainWindow::addCoordinates()
     scene3D.AddPolygonToObject({ 0, 2, 6, 4}, QColor(34,139,34));
     scene3D.AddPolygonToObject({ 0, 4, 5, 1}, QColor(34,139,34));
     scene3D.AddPolygonToObject({ 2, 3, 7, 6}, QColor(34,139,34));
+
+    scene3D.FinishObject();
+}
+
+void MainWindow::MakeSphere()
+{
+    scene3D.SetWindowCoordinates(width(), height());
+    scene3D.StartObject();
+
+    uint rows = 10;
+    uint cols = 10;
+    uint northPolePos = (rows - 1) * cols;
+    uint southPolePos = northPolePos + 1;
+
+    float radius = 200;
+
+    float alphaStart = 0;
+    float alphaEnd = M_PI;
+    float alphaStep = (alphaEnd - alphaStart) / rows;
+
+    float betaStart = 0;
+    float betaEnd = 2 * M_PI;
+    float betaStep = (betaEnd - betaStart) / cols;
+
+    // body
+    for (int i = 1; i < rows; ++i)
+    {
+        float alpha = alphaStart + alphaStep * i;
+        float cosAlpha = cos(alpha);
+        float sinAlpha = sin(alpha);
+
+        for (int j = 0; j < cols; ++j)
+        {
+            float beta = betaStart + betaStep * j;
+
+            float sinBeta = sin(beta);
+            float cosBeta = cos(beta);
+
+            Point3D point;
+            point.x = radius * cosBeta * sinAlpha;
+            point.y = radius * cosAlpha;
+            point.z = radius * sinBeta * sinAlpha;
+
+            scene3D.AddPointToObject(point);
+        }
+    }
+
+    //north pole
+    scene3D.AddPointToObject(Point3D(0, radius, 0));
+    //south pole
+    scene3D.AddPointToObject(Point3D(0, -radius, 0));
+
+    QVector<int> polygon;
+    // body
+    for (int i = 0; i < rows - 1 - 1; ++i)
+    {
+        for (int j = 0; j < cols - 1; ++j)
+        {
+            polygon.clear();
+            polygon.push_back(i*cols + j + 1);
+            polygon.push_back((i + 1)*cols + j + 1);
+            polygon.push_back((i + 1)*cols + j);
+            polygon.push_back(i*cols + j);
+            scene3D.AddPolygonToObject(polygon, QColor(200, 0, 0));
+        }
+
+        polygon.clear();
+        polygon.push_back(i *cols);
+        polygon.push_back((i + 1)*cols);
+        polygon.push_back((i + 2)*cols - 1);
+        polygon.push_back((i + 1)*cols - 1);
+        scene3D.AddPolygonToObject(polygon, QColor(200, 0, 0));
+    }
+
+    // north pole triangles
+    for (int j = 0; j < cols - 1; ++j)
+    {
+        polygon.clear();
+        polygon.push_back(northPolePos);
+        polygon.push_back(j + 1);
+        polygon.push_back(j);
+        scene3D.AddPolygonToObject(polygon, QColor(200, 0, 0));
+    }
+    polygon.clear();
+    polygon.push_back(northPolePos);
+    polygon.push_back(0);
+    polygon.push_back(cols-1);
+    scene3D.AddPolygonToObject(polygon, QColor(200, 0, 0));
+
+    // south pole triangles
+    for (int j = 0; j < cols - 1; ++j)
+    {
+        polygon.clear();
+        polygon.push_back(southPolePos);
+        polygon.push_back((rows - 2)*cols + j);
+        polygon.push_back((rows - 2)*cols + j + 1);
+        scene3D.AddPolygonToObject(polygon, QColor(200, 0, 0));
+    }
+    polygon.clear();
+    polygon.push_back(southPolePos);
+    polygon.push_back((rows - 1) * cols - 1);
+    polygon.push_back((rows - 2) * cols);
+    scene3D.AddPolygonToObject(polygon, QColor(200, 0, 0));
 
     scene3D.FinishObject();
 }

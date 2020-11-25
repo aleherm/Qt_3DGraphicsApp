@@ -31,11 +31,12 @@ public:
 
     void paintEvent(QPaintEvent *e);
     void keyPressEvent(QKeyEvent *event);
-    void addCoordinates();
     void ApplyTransformation();
 
 private:
     Ui::MainWindow *ui;
+    void MakeCube();
+    void MakeSphere();
 };
 
 #endif // MAINWINDOW_H

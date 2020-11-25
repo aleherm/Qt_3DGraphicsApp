@@ -1,8 +1,10 @@
-# Qt_3DGraphicsApp
+# 3DGraphicsApp
 
-Qt_3DGraphicsApp is a C++ Framework for 3D graphic design.
+3DGraphicsApp is a C++ Framework for 3D graphic design, developed from scratch using vectors, geometry concepts, matrix based transformations and many more.
 
-![image info](./pictures/app.png)
+#### You can either choose a cube or a sphere from inside the app's constructor and start moving it around.
+![image info](./pictures/app_cube.png)
+![image info](./pictures/app_sphere.png)
 
 ## Usage -> keyboard
 
