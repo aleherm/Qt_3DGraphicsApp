@@ -6,48 +6,38 @@
 ![image info](./pictures/app_cube.png)
 ![image info](./pictures/app_sphere.png)
 
-## Usage -> keyboard
+## Press following keys to:
+> TRANSLATE
+>
+> <kbd>A</kbd> - move left <br>
+> <kbd>S</kbd> - move down <br>
+> <kbd>D</kbd> - move right <br>
+> <kbd>W</kbd> - move up <br>
 
-```C++
-Press following keys to TRANSLATE:
+> ROTATE
+>
+> <kbd>▲</kbd> - Ox Rotation (Up) <br>
+> <kbd>▼</kbd> - Ox Rotation (Down) <br>
+> <kbd>◄</kbd> - Oy Rotation (Left) <br>
+> <kbd>►</kbd> - Oy Rotation (Right) <br>
+> <kbd>,</kbd> - Oz Rotation (Left) <br>
+> <kbd>.</kbd> - Oz Rotation (Right) <br>
 
-A // move left
-S // move down
-D // move right
-W // move up
-```
+> ZOOM In/Out:
+>
+> <kbd>+</kbd> - Zoom In (via Origin) <br>
+> <kbd>-</kbd> - Zoom Out (via Origin) <br>
+> <kbd>I</kbd> - Zoom In (via Point) <br>
+> <kbd>O</kbd> - Zoom Out (via Point) <br>
 
-```C++
-Press following keys to ROTATE:
-
-Up // OX Rotation (Up)
-Down // OX Rotation (Down)
-Left // OY Rotation (Left)
-Right // OY Rotation (Right)
-Comma // OZ Rotation (Left)
-Period // OZ Rotation (Right)
-```
-
-```C++
-Press following keys to ZOOM In/Out:
-
-Plus // Zoom In (via Origin)
-Down // Zoom Out (via Origin)
-I // Zoom In (via Point)
-O // Zoom Out (via Point)
-
-```
-
-```C++
-Press following keys to display symmetry:
-
-1 // xOy symmetry
-2 // yOz symmetry
-3 // zOx symmetry
-4 // OX symmetry
-5 // OY symmetry
-6 // OZ symmetry
-7 // ORIGIN symmetry
-Q // PLANE symmetry
-
-```
+>SYMMETRY
+>
+> <kbd>1</kbd> - symmetry to xOy <br>
+> <kbd>2</kbd> - symmetry to yOz <br>
+> <kbd>3</kbd> - symmetry to zOx <br>
+> <kbd>4</kbd> - symmetry to the X axis <br>
+> <kbd>5</kbd> - symmetry to the Y axis <br>
+> <kbd>6</kbd> - symmetry to the Z axis <br>
+> <kbd>7</kbd> - symmetry to the O <br>
+> <kbd>Q</kbd><span style="color:red"> - symmetry to the plane (not working) </span> <br>
+> <kbd>L</kbd><span style="color:red"> - symmetry to the line (not working) </span>
